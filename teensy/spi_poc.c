@@ -1,4 +1,5 @@
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 #include <util/delay.h>
 #include "usb_debug_only.h"
@@ -24,15 +25,17 @@ typedef struct message1 {
   char outlet_id[20]; // Up to 10^20 outlets can be sold!
 } message1_t;
 
-void myprint(char*);
+void myprint(volatile char*);
 void spi_slave_init(void);
 void spi_slave_receive(void);
+void spi_simple_slave_receive(void);
 
 // Global Variables
 char message_type;
 int field_num;
 message1_t message1;
-
+volatile char spi_data[500];
+volatile int spi_data_index;
 /*
 
 ! message #1 - Includes:
@@ -66,7 +69,9 @@ int main(void) {
 
 	// blink morse code messages!
 	while (1) {
-    spi_slave_receive();
+    //spi_slave_receive();
+    //spi_simple_slave_receive();
+    LED2_ON;
 	}
 }
 
@@ -74,8 +79,50 @@ void spi_slave_init(void) {
   /* Set MISO output, all others input */
   DDRB = (1<<3);
   /* Enable SPI */
-  SPCR = (1<<SPE);
+  SPCR = (1<<SPE) | (1<<SPIE);
+  spi_data_index = 0;
 }
+
+ISR(SPI_STC_vect) {
+  spi_data[spi_data_index++] = SPDR;
+  if(SPDR == '\0') {
+    LED2_OFF;
+    myprint(spi_data);
+    _delay_ms(5000);
+  }
+}
+
+void spi_simple_slave_receive(void) {
+
+  LED2_ON;
+  while(!(SPSR & (1<<SPIF)));
+  spi_data[spi_data_index++] = SPDR;
+  if(SPDR == '\0') { 
+    LED2_OFF;
+    myprint(spi_data);
+    _delay_ms(5000);
+  }
+}
+
+void myprint(volatile char *str) {
+  print("In myprint!\n\n");
+  int i = 0;
+  while(*str != '\0') {
+    ++i;
+    pchar(*str);
+    str++;
+  }
+  /*
+  for(i = 0; i < 21; ++i) {
+    pchar(*(str+i));
+  }*/
+  print("\n\ni (hex): ");
+  phex16(i);
+  print("\n\n*str: ");
+  pchar(*str);
+
+}
+
 
 void spi_slave_receive(void) {
   LED2_ON;
@@ -150,9 +197,4 @@ void spi_slave_receive(void) {
   return;
 }
 
-void myprint(char *str) {
-  while(*str != '\0') {
-    pchar(*str);
-    str++;
-  }
-}
+
