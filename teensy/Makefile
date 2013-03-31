@@ -41,11 +41,12 @@
 
 
 # Target file name (without extension).
-TARGET = spi_poc
+TARGET = uart_poc
 
 
 # List C source files here. (C dependencies are automatically generated.)
 SRC =	$(TARGET).c \
+  uart.c \
 	usb_debug_only.c \
 	print.c
 
