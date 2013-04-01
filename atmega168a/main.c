@@ -7,25 +7,25 @@
 #include "stdbool.h"
 
 // TODO: Change to proper values!!!
-#define OUTLET1_CONFIG (DDRB |= (1<<6))
-#define OUTLET2_CONFIG (DDRB |= (1<<7))
-#define OUTLET3_CONFIG (DDRB |= (1<<5))
-#define OUTLET4_CONFIG (DDRC |= (1<<7))
+#define OUTLET1_CONFIG (DDRD |= (1<<5))
+#define OUTLET2_CONFIG (DDRD |= (1<<6))
+#define OUTLET3_CONFIG (DDRD |= (1<<7))
+#define OUTLET4_CONFIG (DDRB |= (1<<0))
 
-#define OUTLET1_ON  (PORTB |= (1<<6))
-#define OUTLET1_OFF (PORTB &= ~(1<<6))
-#define OUTLET2_ON  (PORTB |= (1<<7))
-#define OUTLET2_OFF (PORTB &= ~(1<<7))
-#define OUTLET3_ON  (PORTB |= (1<<5))
-#define OUTLET3_OFF (PORTB &= ~(1<<5))
-#define OUTLET4_ON  (PORTC |= (1<<7))
-#define OUTLET4_OFF (PORTC &= ~(1<<7))
+#define OUTLET1_ON  (PORTD |= (1<<5))
+#define OUTLET1_OFF (PORTD &= ~(1<<5))
+#define OUTLET2_ON  (PORTD |= (1<<6))
+#define OUTLET2_OFF (PORTD &= ~(1<<6))
+#define OUTLET3_ON  (PORTD |= (1<<7))
+#define OUTLET3_OFF (PORTD &= ~(1<<7))
+#define OUTLET4_ON  (PORTB |= (1<<0))
+#define OUTLET4_OFF (PORTB &= ~(1<<0))
 
 
 #define BAUD_RATE 2400
 
 #define OUTLET_COUNT 4
-#define MESSAGES_QUEUE_LENGTH 20
+#define MESSAGES_QUEUE_LENGTH 10
 
 #define MESSAGE1_PRODUCT_KEY_LENGTH 10
 #define MESSAGE1_OUTLET_NUMBER_LENGTH 4
@@ -90,13 +90,13 @@ int main(void) {
             // Send message to imp
             send_message2();
           } else {
-            print("Bad outlet state\n");
+            //print("Bad outlet state\n");
           }
         } else {
-          print("Outlet number greater than number of outlets!\n");
+          //print("Outlet number greater than number of outlets!\n");
         }
       } else {
-        print("Message for a different board\n");
+        //print("Message for a different board\n");
       }
       replied_messages_index++;
       if(replied_messages_index >= MESSAGES_QUEUE_LENGTH) {
