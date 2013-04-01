@@ -1,0 +1,15 @@
+Planner Configuration:
+
+Inputs:
+  HTTP In Node, URL: https://api.electricimp.com/v1/15c991e47cd2d556/30106fa2633694d6
+
+Outputs:
+  HTTP Request #1
+    POST
+    application/x-www-form-urlencoded
+    http://ec2-184-169-233-178.us-west-1.compute.amazonaws.com/outlets/set-state
+
+  HTTP Request #2
+    POST
+    application/x-www-form-urlencoded
+    http://ec2-184-169-233-178.us-west-1.compute.amazonaws.com/outlets/init
