@@ -55,6 +55,7 @@ void fill_in_message1(void);
 void print_message1(message1_t message);
 void outlets_init(void);
 void set_outlets_state(void);
+void send_message2(void);
 
 // Global Variables
 int messages_index;
@@ -103,14 +104,16 @@ int main(void) {
           int outlet_state = atoi_length(messages[replied_messages_index].state, MESSAGE1_STATE_LENGTH);
           if(outlet_state == 1 || outlet_state == 0) {
             outlet_states[outlet_number] = outlet_state;
+            // Send message to imp
+            send_message2();
           } else {
-            print("Bad outlet state");
+            print("Bad outlet state\n");
           }
         } else {
-          print("Outlet number greater than number of outlets!");
+          print("Outlet number greater than number of outlets!\n");
         }
       } else {
-        print("Message for a different board");
+        print("Message for a different board\n");
       }
       replied_messages_index++;
       if(replied_messages_index >= MESSAGES_QUEUE_LENGTH) {
@@ -180,12 +183,12 @@ void process_message(void) {
       _delay_ms(1000); // So we have a full message to process
   }
   if (uart_available() < MESSAGE1_LENGTH ) {
-    print("Something went wrong, only have partial message!");
+    print("Something went wrong, only have partial message!\n");
   }
   // First character should indicate message type
   message_type = uart_getchar();
   if (message_type != '!') {
-    print("Received unrecognized Message type!");
+    print("Received unrecognized Message type!\n");
   }
   if (message_type == '!') {
     fill_in_message1();
@@ -210,7 +213,7 @@ void fill_in_message1(void) {
   }
   c = uart_getchar();
   if (c != '\0') {
-    print("Characte ending message was NOT a null... Possible Error! (message_index NOT incremented)");
+    print("Characte ending message was NOT a null... Possible Error! (message_index NOT incremented)\n");
   } else {
     messages_index++;
     if(messages_index >= MESSAGES_QUEUE_LENGTH) {
@@ -242,3 +245,16 @@ void print_message1(message1_t message) {
   print("\n\n");
 }
 
+void send_message2(void) {
+  
+  int i = 0;
+  uart_putchar('@');
+  for(i = 0; i < MESSAGE1_OUTLET_ID_LENGTH; ++i) {
+    uart_putchar(messages[replied_messages_index].outlet_id[i]);
+  }
+  for(i = 0; i < MESSAGE1_STATE_LENGTH; ++i) {
+    uart_putchar(messages[replied_messages_index].state[i]);
+  }
+  uart_putchar('\0');
+  return;
+}
