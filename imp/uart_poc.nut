@@ -10,6 +10,7 @@ local set_outlet_state = OutputPort("outlet-state", "string");
 local init_outlets = OutputPort("init-outlets", "string");
 
 // UART Setup
+// Configured to 2400 buad, 8 bit word size, no parity, 1 stop bit, no CTS/RTS riff-raff
 hardware.uart1289.configure(2400, 8, PARITY_NONE, 1, NO_CTSRTS);
 
 function pad_lsb_zeros(field, length) {
