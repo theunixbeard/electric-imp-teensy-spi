@@ -81,7 +81,7 @@ int main(void) {
     if (messages_index != replied_messages_index) {
       print_message1(messages[replied_messages_index]);
       // Check product key match, strncmp returns 0 if equal
-      if(!strncmp(messages[replied_messages_index].board_product_key, "1234567890", MESSAGE1_PRODUCT_KEY_LENGTH)) {
+      if(!strncmp(messages[replied_messages_index].board_product_key, "1234511111", MESSAGE1_PRODUCT_KEY_LENGTH)) {
         int outlet_number = atoi_length(messages[replied_messages_index].board_outlet_number, MESSAGE1_OUTLET_NUMBER_LENGTH);
         if (outlet_number < OUTLET_COUNT) {
           int outlet_state = atoi_length(messages[replied_messages_index].state, MESSAGE1_STATE_LENGTH);

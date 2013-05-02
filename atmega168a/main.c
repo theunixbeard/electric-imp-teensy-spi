@@ -22,7 +22,7 @@
 #define OUTLET4_OFF (PORTB &= ~(1<<0))
 
 
-#define BAUD_RATE 2400
+#define BAUD_RATE 9600
 
 #define OUTLET_COUNT 4
 #define MESSAGES_QUEUE_LENGTH 10
@@ -125,7 +125,7 @@ void outlets_init(void) {
   int i = 0;
   /* Replace with code to get actual states from DB !!! */
   for(i = 0; i < OUTLET_COUNT; ++i) {
-    outlet_states[i] = true;
+    outlet_states[i] = false;
   }
   set_outlets_state();
 }
