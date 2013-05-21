@@ -125,7 +125,7 @@ void outlets_init(void) {
   int i = 0;
   /* Replace with code to get actual states from DB !!! */
   for(i = 0; i < OUTLET_COUNT; ++i) {
-    outlet_states[i] = true;
+    outlet_states[i] = false;
   }
   set_outlets_state();
 }
